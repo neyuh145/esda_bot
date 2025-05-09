@@ -13,6 +13,13 @@
                 <cylinder radius="0.05" length="0.04"/>
             </geometry>
             <material name="red"/>
+            <!-- <geometry>
+                <mesh filename=".urdf_asterius_v5/assets/urdf_lidar.stl"/>
+            </geometry>
+            <material name="urdf_lidar_material">
+                <color rgba="0.972549 0.529412 0.00392157 1.0"/>
+            </material> -->
+
         </visual>
         <collision>
             <geometry>
