@@ -33,7 +33,7 @@ if(BUILD_TESTING)
 endif()
 
 install(
-  DIRECTORY config description launch worlds urdf_asterius_v4
+  DIRECTORY config description launch worlds 
   DESTINATION share/${PROJECT_NAME}
 )
 

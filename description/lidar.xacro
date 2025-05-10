@@ -5,20 +5,21 @@
         <parent link="chassis"/>
         <child link="laser_frame"/>
         <origin xyz="0.64 0 0.315" rpy="0 0 0"/>
+        
     </joint>
 
     <link name="laser_frame">
         <visual>
-            <geometry>
+            <!-- <geometry>
                 <cylinder radius="0.05" length="0.04"/>
             </geometry>
-            <material name="red"/>
-            <!-- <geometry>
-                <mesh filename=".urdf_asterius_v5/assets/urdf_lidar.stl"/>
+            <material name="red"/> -->
+            <geometry>
+                <mesh filename="/home/huynguyen150103/Documents/esda_software/sim_ws/src/esda_bot/urdf_asterius_v5/assets/urdf_lidar.stl"/>
             </geometry>
             <material name="urdf_lidar_material">
                 <color rgba="0.972549 0.529412 0.00392157 1.0"/>
-            </material> -->
+            </material>
 
         </visual>
         <collision>

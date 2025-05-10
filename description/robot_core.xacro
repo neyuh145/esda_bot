@@ -35,123 +35,44 @@
     <joint name="chassis_joint" type="fixed">
         <parent link="base_link"/>
         <child link="chassis"/>
-        <origin xyz="-0.965423 0 0"/>    <!-- TODO: change "-0.1" to the distance from the center of two wheels to the back of the bot-->
+        <origin xyz="-0.252 0 0"/>    <!-- NOTE: the origin is the coordinates of parent link from child link perspective--> 
     </joint>
 
     <link name="chassis">
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="0"/>
+            <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+        </inertial>
+
+        <!-- Part fcid_welded_body__configuration_ali_2mm -->
         <visual>
-            <origin xyz="0.4827115 0 0.15"/> <!-- TODO: change origin to half the box size (for now assume the bot is a rectangle box)-->
+            <origin xyz="0.486251 -0.158399 -0.282125" rpy="-2.1834 -1.5708 0"/> <!-- NOTE: origin here is the coordinates of the link from the mesh perspective-->
             <geometry>
-                <box size="0.965423 0.35 0.30"/> <!-- size of the bot [width = 1m, length = 0.35m, height = 0.36m] -->
+                <mesh filename="./assets/fcid_welded_body__configuration_ali_2mm.stl"/>
             </geometry>
-            <material name="white"/>
+            <material name="fcid_welded_body__configuration_ali_2mm_material">
+                <color rgba="0.647059 0.647059 0.647059 1.0"/>
+            </material>
         </visual>
         <collision>
-            <origin xyz="0.15 0 0.075"/>
+            <origin xyz="0.486251 -0.158399 -0.282125" rpy="-2.1834 -1.5708 0"/>
             <geometry>
-                <box size="0.3 0.3 0.15"/>
+                <mesh filename="./assets/fcid_welded_body__configuration_ali_2mm.stl"/>
             </geometry>
         </collision>
+
         <xacro:inertial_box mass="0.5" x="0.3" y="0.3" z="0.15"> <!-- TODO: change mass and size of robot -->
             <origin xyz="0.15 0 0.075" rpy="0 0 0"/>
         </xacro:inertial_box>
+
     </link>
 
     <gazebo reference="chassis">
         <material>Gazebo/White</material>
     </gazebo>
     
-   
-    <!-- LEFT WHEEL LINK -->
-
-    <joint name="left_wheel_joint" type="continuous">
-        <parent link="base_link"/>
-        <child link="left_wheel"/>
-        <origin xyz="0 0.175 0" rpy="-${pi/2} 0 0" /> <!-- TODO: change y offset to how far the wheel from the center -->
-        <axis xyz="0 0 1"/>
-    </joint>
-
-    <link name="left_wheel">
-        <visual>
-            <geometry>
-                <cylinder radius="0.1625" length="0.117"/> <!-- TODO: change size of the wheel's radius and its thickness -->
-            </geometry>
-            <material name="blue"/>
-        </visual>
-        <collision>
-            <geometry>
-                <cylinder radius="0.1625" length="0.117"/> <!-- TODO: change size of the wheel's radius and its thickness -->
-            </geometry>
-        </collision>
-        <xacro:inertial_cylinder mass="0.1" length="0.1625" radius="0.117"> <!-- TODO: change weight and size of the wheel's radius and its thickness -->
-            <origin xyz="0 0 0" rpy="0 0 0"/>
-        </xacro:inertial_cylinder>
-    </link>
-
-    <gazebo reference="left_wheel">
-        <material>Gazebo/Blue</material>
-    </gazebo>
-
-    <!-- RIGHT WHEEL LINK -->
-
-    <joint name="right_wheel_joint" type="continuous">
-        <parent link="base_link"/>
-        <child link="right_wheel"/>
-        <origin xyz="0 -0.175 0" rpy="${pi/2} 0 0" /> <!-- TODO: change y offset to how far the wheel from the center -->
-        <axis xyz="0 0 -1"/>
-    </joint>
-
-    <link name="right_wheel">
-        <visual>
-            <geometry>
-                <cylinder radius="0.1625" length="0.117"/> <!-- TODO: change size of the wheel's radius and its thickness -->
-            </geometry>
-            <material name="blue"/>
-        </visual>
-        <collision>
-            <geometry>
-                <cylinder radius="0.1625" length="0.117"/> <!-- TODO: change weight and size of the wheel's radius and its thickness -->
-            </geometry>
-        </collision>
-        <xacro:inertial_cylinder mass="0.1" length="0.1625" radius="0.117">
-            <origin xyz="0 0 0" rpy="0 0 0"/>
-        </xacro:inertial_cylinder>
-    </link>
-
-    <gazebo reference="right_wheel">
-        <material>Gazebo/Blue</material>
-    </gazebo>
-
-    <!-- CASTER WHEEL LINK -->
-
-    <joint name="caster_wheel_joint" type="fixed">
-        <parent link="chassis"/>
-        <child link="caster_wheel"/>
-        <origin xyz="0.24 0 -0.0825"/>
-    </joint>
 
 
-    <link name="caster_wheel">
-        <visual>
-            <geometry>
-                <sphere radius="0.08"/> <!-- TODO: change caster wheel radius -->
-            </geometry>
-            <material name="black"/>
-        </visual>
-        <collision>
-            <geometry>
-                <sphere radius="0.08"/><!-- TODO: change caster wheel radius -->
-            </geometry>
-        </collision>
-        <xacro:inertial_sphere mass="0.1" radius="0.08">
-            <origin xyz="0 0 0" rpy="0 0 0"/>
-        </xacro:inertial_sphere>
-    </link>
-    
-    <gazebo reference="caster_wheel">
-        <material>Gazebo/Black</material>
-        <mu1 value="0.001"/>
-        <mu2 value="0.001"/>
-    </gazebo>
-    
+
 </robot>
