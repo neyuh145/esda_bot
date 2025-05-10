@@ -35,7 +35,7 @@
     <joint name="chassis_joint" type="fixed">
         <parent link="base_link"/>
         <child link="chassis"/>
-        <origin xyz="-0.252 0 0"/>    <!-- NOTE: the origin is the coordinates of parent link from child link perspective--> 
+        <origin xyz="-0.08353 0 0.0137"/>    <!-- NOTE: the origin is the coordinates of parent link from child link perspective--> 
     </joint>
 
     <link name="chassis">
@@ -47,26 +47,417 @@
 
         <!-- Part fcid_welded_body__configuration_ali_2mm -->
         <visual>
-            <origin xyz="0.486251 -0.158399 -0.282125" rpy="-2.1834 -1.5708 0"/> <!-- NOTE: origin here is the coordinates of the link from the mesh perspective-->
+            <origin xyz="-0.4005 0 0.15" rpy="0 0 ${pi/2}"/> <!-- NOTE: origin here is the coordinates of the link from the mesh perspective-->
             <geometry>
-                <mesh filename="./assets/fcid_welded_body__configuration_ali_2mm.stl"/>
+                <mesh filename="file://$(find esda_bot)/description/assets/fcid_welded_body__configuration_ali_2mm.stl"/>
             </geometry>
             <material name="fcid_welded_body__configuration_ali_2mm_material">
                 <color rgba="0.647059 0.647059 0.647059 1.0"/>
             </material>
         </visual>
         <collision>
-            <origin xyz="0.486251 -0.158399 -0.282125" rpy="-2.1834 -1.5708 0"/>
+            <origin xyz="-0.4005 0 0.15" rpy="0 0 ${pi/2}"/>
             <geometry>
-                <mesh filename="./assets/fcid_welded_body__configuration_ali_2mm.stl"/>
+                <mesh filename="file://$(find esda_bot)/description/assets/fcid_welded_body__configuration_ali_2mm.stl"/>
             </geometry>
         </collision>
 
-        <xacro:inertial_box mass="0.5" x="0.3" y="0.3" z="0.15"> <!-- TODO: change mass and size of robot -->
-            <origin xyz="0.15 0 0.075" rpy="0 0 0"/>
-        </xacro:inertial_box>
+        <!-- Part fcid_gps_fin -->
+        <visual>
+            <origin xyz="-0.396667 0.007603 0.150000" rpy="-0.017180 0.000000 ${pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/fcid_gps_fin.stl"/>
+            </geometry>
+            <material name="fcid_gps_fin_material">
+                <color rgba="0.917647 0.917647 0.917647 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="-0.396667 0.007603 0.150000" rpy="-0.017180 0.000000 ${pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/fcid_gps_fin.stl"/>
+            </geometry>
+        </collision>
+
+        <!-- Part fcid_lidar_fin -->
+        <visual>
+            <origin xyz="-0.402550 0.000829 0.149771" rpy="0.000000 0.000000 ${pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/fcid_lidar_fin.stl"/>
+            </geometry>
+            <material name="fcid_lidar_fin_material">
+                <color rgba="0.917647 0.917647 0.917647 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="-0.402550 0.000829 0.149771" rpy="0.000000 0.000000 ${pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/fcid_lidar_fin.stl"/>
+            </geometry>
+        </collision>
+
+        <!-- Part fcid_lid__configuration_ali_2mm -->
+        <visual>
+            <origin xyz="-0.4005 0 0.15" rpy="0 0 ${pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/fcid_lid__configuration_ali_2mm.stl"/>
+            </geometry>
+            <material name="fcid_lid__configuration_ali_2mm_material">
+                <color rgba="0.647059 0.647059 0.647059 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="-0.4005 0 0.15" rpy="0 0 ${pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/fcid_lid__configuration_ali_2mm.stl"/>
+            </geometry>
+        </collision>
+
+        <!-- Part fcid_body_right__configuration_ali_2mm -->
+        <visual>
+            <origin xyz="-0.4005 0 0.15" rpy="0 0 ${pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/fcid_body_right__configuration_ali_2mm.stl"/>
+            </geometry>
+            <material name="fcid_body_right__configuration_ali_2mm_material">
+                <color rgba="0.917647 0.917647 0.917647 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="-0.4005 0 0.15" rpy="0 0 ${pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/fcid_body_right__configuration_ali_2mm.stl"/>
+            </geometry>
+        </collision>
+
+        <!-- Part fcid_divider_mount__configuration_ali_2mm -->
+        <visual>
+            <origin xyz="-0.4005 0 0.15" rpy="0 0 ${pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/fcid_divider_mount__configuration_ali_2mm.stl"/>
+            </geometry>
+            <material name="fcid_divider_mount__configuration_ali_2mm_material">
+                <color rgba="0.647059 0.647059 0.647059 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="-0.4005 0 0.15" rpy="0 0 ${pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/fcid_divider_mount__configuration_ali_2mm.stl"/>
+            </geometry>
+        </collision>
+
+        <!-- Part fcid_camera_mount -->
+        <visual>
+            <origin xyz="-0.384 0.004445 0.1436" rpy="0 0 ${pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/fcid_camera_mount.stl"/>
+            </geometry>
+            <material name="fcid_camera_mount_material">
+                <color rgba="0.917647 0.917647 0.917647 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="-0.384 0.004445 0.1436" rpy="0 0 ${pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/fcid_camera_mount.stl"/>
+            </geometry>
+        </collision>
+
+        <!-- Part fcid_rear__configuration_ali_2mm -->
+        <visual>
+            <origin xyz="-0.4005 0 0.15" rpy="0 0 ${pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/fcid_rear__configuration_ali_2mm.stl"/>
+            </geometry>
+            <material name="fcid_rear__configuration_ali_2mm_material">
+                <color rgba="0.647059 0.647059 0.647059 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="-0.4005 0 0.15" rpy="0 0 ${pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/fcid_rear__configuration_ali_2mm.stl"/>
+            </geometry>
+        </collision>
+
+        <!-- Part fcid_divider__configuration_ali_2mm -->
+        <visual>
+            <origin xyz="-0.4005 0 0.15" rpy="0 0 ${pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/fcid_divider__configuration_ali_2mm.stl"/>
+            </geometry>
+            <material name="fcid_divider__configuration_ali_2mm_material">
+                <color rgba="0.647059 0.647059 0.647059 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="-0.4005 0 0.15" rpy="0 0 ${pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/fcid_divider__configuration_ali_2mm.stl"/>
+            </geometry>
+        </collision>
+
+        <!-- Part fcid_body_left__configuration_ali_2mm -->
+        <visual>
+            <origin xyz="-0.4005 0 0.15" rpy="0 0 ${pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/fcid_body_left__configuration_ali_2mm.stl"/>
+            </geometry>
+            <material name="fcid_body_left__configuration_ali_2mm_material">
+                <color rgba="0.917647 0.917647 0.917647 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="-0.4005 0 0.15" rpy="0 0 ${pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/fcid_body_left__configuration_ali_2mm.stl"/>
+            </geometry>
+        </collision>
+
+        <!-- Part arm_rhs -->
+        <visual>
+            <origin xyz="-0.0663 -0.201 -0.0136" rpy="0 ${pi*2} -${pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/arm_rhs.stl"/>
+            </geometry>
+            <material name="arm_rhs_material">
+                <color rgba="0.8 0.8 0.8 1.0"/>
+            </material>
+        </visual>
+        <collision>
+             <origin xyz="-0.0663 -0.201 -0.0136" rpy="0 ${pi*2} -${pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/arm_rhs.stl"/>
+            </geometry>
+        </collision>
+        
+        <!-- Part drve_arm_bracket -->
+        <visual>
+            <origin xyz="0.0835 -0.2 -0.01368" rpy="-1.319047 ${pi} ${3*pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/drve_arm_bracket.stl"/>
+            </geometry>
+            <material name="drve_arm_bracket_material">
+                <color rgba="0.8 0.8 0.8 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0.0835 -0.2 -0.01368" rpy="-1.319047 ${pi} ${3*pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/drve_arm_bracket.stl"/>
+            </geometry>
+        </collision>"
+
+        	<!-- Part drve_bottom_plate -->
+        <visual>
+            <origin xyz="0.0835 -0.2203 -0.01368" rpy="-1.319047 ${pi} ${3*pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/drve_bottom_plate.stl"/>
+            </geometry>
+            <material name="drve_bottom_plate_material">
+                <color rgba="0.917647 0.917647 0.917647 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0.0835 -0.2203 -0.01368" rpy="-1.319047 ${pi} ${3*pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/drve_bottom_plate.stl"/>
+            </geometry>
+        </collision>
+
+        <!-- Part drve_middle -->
+        <visual>
+            <origin xyz="0.0835 -0.2203 -0.01368" rpy="-1.319047 ${pi} ${3*pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/drve_middle.stl"/>
+            </geometry>
+            <material name="drve_middle_material">
+                <color rgba="0.501961 0.501961 0.501961 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0.0835 -0.2203 -0.01368" rpy="-1.319047 ${pi} ${3*pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/drve_middle.stl"/>
+            </geometry>
+        </collision>
+
+        <!-- Part drve_top_plate -->
+        <visual>
+            <origin xyz="0.0835 -0.2203 -0.01368" rpy="-1.319047 ${pi} ${3*pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/drve_top_plate.stl"/>
+            </geometry>
+            <material name="drve_top_plate_material">
+                <color rgba="0.917647 0.917647 0.917647 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0.0835 -0.2203 -0.01368" rpy="-1.319047 ${pi} ${3*pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/drve_top_plate.stl"/>
+            </geometry>
+        </collision>
+        
+        <!-- Part bort_motor -->
+        <visual>
+            <origin xyz="0.0835 -0.2203 -0.01368" rpy="-1.319047 ${pi} ${3*pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/bort_motor.stl"/>
+            </geometry>
+            <material name="bort_motor_material">
+                <color rgba="0.654902 0.823529 0.576471 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0.0835 -0.2203 -0.01368" rpy="-1.319047 ${pi} ${3*pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/bort_motor.stl"/>
+            </geometry>
+        </collision>
+
+        <!-- Part arm_endcap -->
+        <visual>
+            <origin xyz="-0.0663 -0.201 -0.0136" rpy="0 ${pi*2} -${pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/arm_endcap.stl"/>
+            </geometry>
+            <material name="arm_endcap_material">
+                <color rgba="0.121569 0.121569 0.121569 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="-0.0663 -0.201 -0.0136" rpy="0 ${pi*2} -${pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/arm_endcap.stl"/>
+            </geometry>
+        </collision>
+       
+
+        <!-- Part arm_rhs_2 -->
+        <visual>
+            <origin xyz="-0.0367 0.201 0.07287" rpy="0.64 ${pi} -${pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/arm_rhs.stl"/>
+            </geometry>
+            <material name="arm_rhs_2_material">
+                <color rgba="0.8 0.8 0.8 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="-0.0367 0.201 0.07287" rpy="0.64 ${pi} -${pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/arm_rhs.stl"/>
+            </geometry>
+        </collision>
+
+        <!-- Part drve_arm_bracket_2 -->
+        <visual>
+            <origin xyz="0.0835 0.2 -0.01368" rpy="-1.319047 ${pi} ${pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/drve_arm_bracket.stl"/>
+            </geometry>
+            <material name="drve_arm_bracket_2_material">
+                <color rgba="0.8 0.8 0.8 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0.0835 0.2 -0.01368" rpy="-1.319047 ${pi} ${pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/drve_arm_bracket.stl"/>
+            </geometry>
+        </collision>
+
+
+        <!-- Part bort_motor_2 -->
+        <visual>
+            <origin xyz="0.0835 0.2203 -0.01368" rpy="-1.319047 ${pi} ${pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/bort_motor.stl"/>
+            </geometry>
+            <material name="bort_motor_2_material">
+                <color rgba="0.654902 0.823529 0.576471 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0.0835 0.2203 -0.01368" rpy="-1.319047 ${pi} ${pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/bort_motor.stl"/>
+            </geometry>
+        </collision>
+
+        <!-- Part drve_bottom_plate_2 -->
+        <visual>
+            <origin xyz="0.0835 0.2203 -0.01368" rpy="-1.319047 ${pi} ${pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/drve_bottom_plate.stl"/>
+            </geometry>
+            <material name="drve_bottom_plate_2_material">
+                <color rgba="0.917647 0.917647 0.917647 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0.0835 0.2203 -0.01368" rpy="-1.319047 ${pi} ${pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/drve_bottom_plate.stl"/>
+            </geometry>
+        </collision>
+
+        <!-- Part drve_top_plate_2 -->
+        <visual>
+            <origin xyz="0.0835 0.2203 -0.01368" rpy="-1.319047 ${pi} ${pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/drve_top_plate.stl"/>
+            </geometry>
+            <material name="drve_top_plate_2_material">
+                <color rgba="0.917647 0.917647 0.917647 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0.0835 0.2203 -0.01368" rpy="-1.319047 ${pi} ${pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/drve_top_plate.stl"/>
+            </geometry>
+        </collision>
+
+        <!-- Part drve_middle_2 -->
+        <visual>
+            <origin xyz="0.0835 0.2203 -0.01368" rpy="-1.319047 ${pi} ${pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/drve_middle.stl"/>
+            </geometry>
+            <material name="drve_middle_2_material">
+                <color rgba="0.501961 0.501961 0.501961 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0.0835 0.2203 -0.01368" rpy="-1.319047 ${pi} ${pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/drve_middle.stl"/>
+            </geometry>
+        </collision>
+
+        <!-- Part arm_endcap_2 -->
+        <visual>
+            <origin xyz="-0.0367 0.201 0.07287" rpy="0.64 ${pi} -${pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/arm_endcap.stl"/>
+            </geometry>
+            <material name="arm_endcap_2_material">
+                <color rgba="0.121569 0.121569 0.121569 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="-0.0367 0.201 0.07287" rpy="0.64 ${pi} -${pi/2}"/>
+            <geometry>
+                <mesh filename="file://$(find esda_bot)/description/assets/arm_endcap.stl"/>
+            </geometry>
+        </collision>
 
     </link>
+
+
 
     <gazebo reference="chassis">
         <material>Gazebo/White</material>

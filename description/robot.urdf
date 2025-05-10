@@ -78,17 +78,7 @@
         <visual>
             <origin xyz="0.486251 -0.158399 -0.282125" rpy="-2.1834 -1.5708 0"/>
             <geometry>
-                <mesh filename="/home/huynguyen150103/Documents/esda_software/sim_ws/src/esda_bot/urdf_asterius_v5/assets/fcid_lid__configuration_ali_2mm.stl"/>
-            </geometry>
-            <material name="fcid_lid__configuration_ali_2mm_material">
-                <color rgba="0.647059 0.647059 0.647059 1.0"/>
-            </material>
-        </visual>
-        <collision>
-            <origin xyz="0.486251 -0.158399 -0.282125" rpy="-2.1834 -1.5708 0"/>
-            <geometry>
-                <mesh filename="/home/huynguyen150103/Documents/esda_software/sim_ws/src/esda_bot/urdf_asterius_v5/assets/fcid_lid__configuration_ali_2mm.stl"/>
-            </geometry>
+                <mesh filename="/home/huynguyen150103/Documents/esda_software/sim_ws/src/esda_bot/urdf_asterius_v5/assets/fcid_lid__configuration_ali_2mm.stl"/><origin xyz="0.118543 -0.091911 -0.483125" rpy="-0.911273 1.5708 0"/>
         </collision>
         <!-- Part fcid_body_right__configuration_ali_2mm -->
         <visual>
@@ -106,7 +96,7 @@
                 <mesh filename="/home/huynguyen150103/Documents/esda_software/sim_ws/src/esda_bot/urdf_asterius_v5/assets/fcid_body_right__configuration_ali_2mm.stl"/>
             </geometry>
         </collision>
-        <!-- Part fcid_divider_mount__configuration_ali_2mm -->
+        <!-- Part fcid_divider_mount__configuration_ali_2mm<origin xyz="0.118543 -0.091911 -0.483125" rpy="-0.911273 1.5708 0"/> -->
         <visual>
             <origin xyz="0.486251 -0.158399 -0.282125" rpy="-2.1834 -1.5708 0"/>
             <geometry>
