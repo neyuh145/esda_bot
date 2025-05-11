@@ -7,8 +7,8 @@
             <!-- Wheel Information -->
             <left_joint>left_wheel_joint</left_joint>
             <right_joint>right_wheel_joint</right_joint>
-            <wheel_separation>0.35</wheel_separation> <!-- TODO: Need to change this-->
-            <wheel_diameter>0.1</wheel_diameter> <!-- TODO: Need to change this-->
+            <wheel_separation>0.626</wheel_separation>       <!-- TODO: Need to change this-->
+            <wheel_diameter>0.32494</wheel_diameter>            <!-- TODO: Need to change this-->
 
 
             <!-- Limits -->
