@@ -457,18 +457,22 @@
 
     </link>
 
+    <gazebo reference="chassis">
+        <material>Gazebo/White</material>
+    </gazebo>
+
     <!-- LEFT WHEEL LINK -->
 
-    <!-- Joint from urdf_rigid_v2 to urdf_drve_wheel_assembly --> 
+    <!-- Joint from urdf_rigid_v2 to left_wheel --> 
     <joint name="left_wheel_joint" type="continuous">
-        <origin xyz="0 0.313 0" rpy="-${pi/2} 0 0"/>
         <parent link="base_link"/> 
-        <child link="urdf_drve_wheel_assembly"/>
+        <child link="left_wheel"/>
+        <origin xyz="0 0.313 0" rpy="-${pi/2} 0 0"/>
         <axis xyz="0 0 1"/>
     </joint>
 
-    <!-- Link urdf_drve_wheel_assembly -->
-    <link name="urdf_drve_wheel_assembly">  
+    <!-- Link left_wheel -->
+    <link name="left_wheel">  
         <inertial>
             <origin xyz="0 0 0" rpy="0 0 0"/>
             <mass value="2.46468"/>
@@ -528,18 +532,22 @@
 
     </link>
     
+    <gazebo reference="left_wheel">
+        <material>Gazebo/Blue</material>
+    </gazebo>
+
     <!-- RIGHT WHEEL LINK -->
 
-    <!-- Joint from urdf_rigid_v2 to urdf_drve_wheel_assembly_2 -->
+    <!-- Joint from urdf_rigid_v2 to right_wheel -->
     <joint name="right_wheel_joint" type="continuous">
-        <origin xyz="0 -0.313 0" rpy="${pi/2} 0 0"/>
         <parent link="base_link"/> 
-        <child link="urdf_drve_wheel_assembly_2"/>
+        <child link="right_wheel"/>
+        <origin xyz="0 -0.313 0" rpy="${pi/2} 0 0"/>
         <axis xyz="0 0 -1"/>
     </joint>
 
-    <!-- Link urdf_drve_wheel_assembly_2 -->
-    <link name="urdf_drve_wheel_assembly_2">
+    <!-- Link right_wheel -->
+    <link name="right_wheel">
         <inertial>
             <origin xyz="0 0 0" rpy="0 0 0"/>
             <mass value="2.46468"/>
@@ -599,13 +607,17 @@
         
     </link>
 
+    <gazebo reference="right_wheel">
+        <material>Gazebo/Blue</material>
+    </gazebo>
+
     <!-- CASTER WHEEL LINK -->
 
     <!-- Joint from urdf_rigid_v2 to urdf_cstr_assembly_v2 -->
     <joint name="caster" type="continuous">
-        <origin xyz="-0.58960275 0 0.06" rpy="0 0 0"/> 5914315
         <parent link="chassis"/>
         <child link="urdf_cstr_assembly_v2"/>
+        <origin xyz="-0.58960275 0 0.06" rpy="0 0 0"/> 
         <axis xyz="0 0 1"/>
     </joint>
 
@@ -686,11 +698,15 @@
         </collision>
     </link>
 
+    <gazebo reference="urdf_cstr_assembly_v2">
+        <material>Gazebo/White</material>
+    </gazebo>
+
     <!-- Joint from urdf_cstr_assembly_v2 to urdf_cstr_wheel_assembly__configuration_default -->
     <joint name="wheelrear_speed" type="continuous">
-        <origin xyz="-0.159386 0 -0.142" rpy="${pi/2} 0 0"/>
         <parent link="urdf_cstr_assembly_v2"/>
         <child link="urdf_cstr_wheel_assembly__configuration_default"/>
+        <origin xyz="-0.159386 0 -0.142" rpy="${pi/2} 0 0"/>
         <axis xyz="0 0 -1"/>
     </joint>
     
@@ -738,13 +754,11 @@
 
     </link>
 
-
-
-    <gazebo reference="chassis">
-        <material>Gazebo/White</material>
+    <gazebo reference="urdf_cstr_wheel_assembly__configuration_default">
+        <material>Gazebo/Black</material>
+        <mu1 value="0.001"/>
+        <mu2 value="0.001"/>
     </gazebo>
-    
-
 
 
 </robot>
