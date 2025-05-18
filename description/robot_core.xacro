@@ -41,8 +41,13 @@
     <link name="chassis">
         <inertial>
             <origin xyz="0 0 0" rpy="0 0 0"/>
+<<<<<<< HEAD
             <mass value="10"/>
             <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+=======
+            <mass value="0"/>
+            <inertia ixx="1.732000" ixy="-0.047271135" ixz="-0.551074502" iyy="4.507000" iyz="0.009138455" izz="5.113"/>
+>>>>>>> f1976daab1522185033feb2ab3a662063fabcff0
         </inertial>
 
         <!-- Part fcid_welded_body__configuration_ali_2mm -->
