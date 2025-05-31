@@ -617,15 +617,15 @@
     <!-- CASTER WHEEL LINK -->
 
     <!-- Joint from urdf_rigid_v2 to urdf_cstr_assembly_v2 -->
-    <joint name="caster" type="continuous">
+    <joint name="caster_leg_joint" type="continuous">
         <parent link="chassis"/>
-        <child link="urdf_cstr_assembly_v2"/>
+        <child link="caster_leg"/>
         <origin xyz="-0.58960275 0 0.06" rpy="0 0 0"/> 
         <axis xyz="0 0 1"/>
     </joint>
 
     <!-- Link urdf_cstr_assembly_v2 -->
-    <link name="urdf_cstr_assembly_v2">
+    <link name="caster_leg">
         <inertial>
             <origin xyz="0 -0.0357066 0" rpy="0 0 0"/>
             <mass value="0.252085"/>
@@ -701,20 +701,20 @@
         </collision>
     </link>
 
-    <gazebo reference="urdf_cstr_assembly_v2">
+    <gazebo reference="caster_leg">
         <material>Gazebo/White</material>
     </gazebo>
 
     <!-- Joint from urdf_cstr_assembly_v2 to urdf_cstr_wheel_assembly__configuration_default -->
-    <joint name="wheelrear_speed" type="continuous">
-        <parent link="urdf_cstr_assembly_v2"/>
-        <child link="urdf_cstr_wheel_assembly__configuration_default"/>
+    <joint name="caster_wheel_joint" type="continuous">
+        <parent link="caster_leg"/>
+        <child link="caster_wheel"/>
         <origin xyz="-0.159386 0 -0.142" rpy="${pi/2} 0 0"/>
         <axis xyz="0 0 -1"/>
     </joint>
     
     <!-- Link urdf_cstr_wheel_assembly__configuration_default -->
-    <link name="urdf_cstr_wheel_assembly__configuration_default">
+    <link name="caster_wheel">
         <inertial>
             <origin xyz="6.26367e-17 -2.28362e-13 0" rpy="0 0 0"/>
             <mass value="0.45"/>
@@ -760,7 +760,7 @@
 
     </link>
 
-    <gazebo reference="urdf_cstr_wheel_assembly__configuration_default">
+    <gazebo reference="caster_wheel">
         <material>Gazebo/Black</material>
         <mu1 value="0.001"/>
         <mu2 value="0.001"/>
