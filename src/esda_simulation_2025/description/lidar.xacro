@@ -1,0 +1,145 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" >
+
+    <!-- lidar_mount: "pole_top" (default) raises the sensor on a mounting
+         pole above the chassis/camera so its 360 deg scan isn't blocked.
+         "low" reverts to the original single mount, directly on the chassis,
+         no pole. Select with e.g. `xacro robot.urdf.xacro lidar_mount:=low`.
+
+         camera_mount:=pole_top with lidar_mount:=low IS NOW THE DEFAULT,
+         on measured evidence (36 runs, 2026-10-20: best of four mount
+         combinations in all three worlds).
+
+         An earlier version of this comment said that combination made no
+         physical sense. That was half right. camera.xacro's pole_top joint
+         has parent link "chassis" with an absolute offset, not the pole,
+         so the camera's POSE is correct whether or not the pole link is
+         built - the TF, and therefore every lane projection, is valid.
+         What is missing with lidar_mount:=low is only the pole's visual,
+         collision and inertia.
+
+         STILL OPEN, FOR WHOEVER BUILDS THE REAL MAST: the pole here sits at
+         y=0, which is exactly where the low LiDAR mounts, so a mast on this
+         axis would sit in the LiDAR's own scan plane. The camera is offset
+         to y=+0.10, so the physical mast wants to be its own column clear
+         of the sensor. Whatever gets built will appear in the LiDAR returns
+         and should be re-measured, because no mast geometry was present in
+         the runs this default is based on. -->
+    <xacro:arg name="lidar_mount" default="pole_top" />
+
+    <!-- Pole: square tube, sized to match the physical part
+         (assets/pruned/part_1__7.stl is 40x40mm x 1.0m). The base sits at
+         the old (pre-pole) sensor mount point; the sensor itself sits on
+         top of the pole, 1m higher, at the same x/y. -->
+    <xacro:property name="lidar_pole_width"  value="0.04"/>
+    <xacro:property name="lidar_pole_length" value="1.0"/>
+    <xacro:property name="lidar_pole_mass"   value="0.3"/>
+    <xacro:property name="lidar_mount_x"     value="0.560407"/>
+    <xacro:property name="lidar_mount_y"     value="0"/>
+    <xacro:property name="lidar_pole_base_z" value="0.385"/>
+
+    <xacro:if value="${'$(arg lidar_mount)' == 'pole_top'}">
+        <joint name="lidar_pole_joint" type="fixed">
+            <parent link="chassis"/>
+            <child link="lidar_pole"/>
+            <origin xyz="${lidar_mount_x} ${lidar_mount_y} ${lidar_pole_base_z}" rpy="0 0 0"/>
+        </joint>
+
+        <link name="lidar_pole">
+            <visual>
+                <origin xyz="0 0 ${lidar_pole_length/2}"/>
+                <geometry>
+                    <box size="${lidar_pole_width} ${lidar_pole_width} ${lidar_pole_length}"/>
+                </geometry>
+                <material name="grey"/>
+            </visual>
+            <collision>
+                <origin xyz="0 0 ${lidar_pole_length/2}"/>
+                <geometry>
+                    <box size="${lidar_pole_width} ${lidar_pole_width} ${lidar_pole_length}"/>
+                </geometry>
+            </collision>
+            <xacro:inertial_box mass="${lidar_pole_mass}" x="${lidar_pole_width}" y="${lidar_pole_width}" z="${lidar_pole_length}">
+                <origin xyz="0 0 ${lidar_pole_length/2}" rpy="0 0 0"/>
+            </xacro:inertial_box>
+        </link>
+
+        <gazebo reference="lidar_pole">
+            <material>Gazebo/Grey</material>
+        </gazebo>
+
+        <joint name="laser_joint" type="fixed">
+            <parent link="lidar_pole"/>
+            <child link="laser_frame"/>
+            <origin xyz="0 0 ${lidar_pole_length}" rpy="0 0 0"/>
+        </joint>
+    </xacro:if>
+    <xacro:unless value="${'$(arg lidar_mount)' == 'pole_top'}">
+        <joint name="laser_joint" type="fixed">
+            <parent link="chassis"/>
+            <child link="laser_frame"/>
+            <origin xyz="${lidar_mount_x} ${lidar_mount_y} ${lidar_pole_base_z}" rpy="0 0 0"/>
+        </joint>
+    </xacro:unless>
+
+    <link name="laser_frame">
+        <visual>
+            <geometry>
+                <cylinder radius="0.05" length="0.04"/>
+            </geometry>
+            <material name="red"/>
+        </visual>
+        <visual>
+            <origin xyz="0 0 -0.05"/>
+            <geometry>
+                <cylinder radius="0.01" length="0.1"/>
+            </geometry>
+            <material name="red"/>
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder radius="0.05" length="0.04"/>
+            </geometry>
+        </collision>
+        <xacro:inertial_cylinder mass="0.1" length="0.04" radius="0.05">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:inertial_cylinder>
+    </link>
+
+        
+    <gazebo reference="laser_frame"> 
+        <material>Gazebo/Red</material>
+        <sensor name='laser_frame' type='gpu_lidar'>
+            <pose relative_to='laser_frame'>0 0 0 0 0 0</pose>
+            <topic>scan</topic>
+            <update_rate>10</update_rate>
+            <gz_frame_id>laser_frame</gz_frame_id>
+            <ray>
+                <scan>
+                    <horizontal>
+                        <samples>360</samples>
+                        <resolution>1</resolution>
+                        <min_angle>-3.14159</min_angle> 
+                        <max_angle>3.14159</max_angle>
+                    </horizontal>
+                    <vertical>
+                        <samples>1</samples>
+                        <resolution>1</resolution>
+                        <min_angle>0</min_angle>
+                        <max_angle>0</max_angle>
+                    </vertical>
+                </scan>
+                <range>
+                    <min>0.1</min>
+                    <max>12.0</max>
+                    <resolution>0.01</resolution>
+                </range>
+            </ray>
+            <always_on>1</always_on>
+            <visualize>true</visualize>
+        </sensor>
+        
+    </gazebo >
+
+
+</robot>

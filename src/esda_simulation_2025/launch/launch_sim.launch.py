@@ -1,0 +1,228 @@
+import os
+from ament_index_python.packages import get_package_share_directory
+from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, RegisterEventHandler, SetEnvironmentVariable
+from launch.conditions import IfCondition
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import LaunchConfiguration, Command, PathJoinSubstitution
+from launch.event_handlers import OnProcessExit
+from launch_ros.actions import Node
+from launch_ros.parameter_descriptions import ParameterValue
+from launch_ros.substitutions import FindPackageShare
+
+def generate_launch_description():    
+
+    # Define the input parameters
+    use_sim_time = LaunchConfiguration('use_sim_time', default='true')
+    use_ros2_control = LaunchConfiguration('use_ros2_control', default='true')
+    use_lidar = LaunchConfiguration('use_lidar', default='true')
+    world_file = LaunchConfiguration('world_file')
+    spawn_x = LaunchConfiguration('spawn_x', default='0.0')
+    spawn_y = LaunchConfiguration('spawn_y', default='0.0')
+    robot_model = LaunchConfiguration('robot_model', default='robot.urdf.xacro')
+    camera_mount = LaunchConfiguration('camera_mount', default='pole_top')
+    lidar_mount = LaunchConfiguration('lidar_mount', default='low')
+    package_name = 'esda_simulation_2025'
+    
+    # ROS Controller Files:
+    robot_controllers = PathJoinSubstitution(
+        [
+            FindPackageShare(package_name),
+            'config',
+            'my_controllers_2wd.yaml',
+        ]
+    )
+
+    # Launch robot_state_publisher
+    rsp = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(get_package_share_directory(package_name), 'launch', 'rsp.launch.py')
+        ),
+        launch_arguments={
+            'use_sim_time': 'true',
+            'use_ros2_control': 'true',
+            'use_lidar': use_lidar,
+            'robot_model': robot_model,
+            'camera_mount': camera_mount,
+            'lidar_mount': lidar_mount
+        }.items()
+    )
+
+    # EKF (IMU + wheel odom fusion) - the sole publisher of odom->base_link TF.
+    # Launched here (not as a bare Node) so it stays in sync with
+    # robot_localization_ekf.launch.py if that ever changes.
+    ekf_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(get_package_share_directory(package_name), 'launch', 'robot_localization_ekf.launch.py')
+        )
+    )
+
+    # --- 2) Launch Ignition sim server + client ---
+    ign_resource_path = SetEnvironmentVariable(
+        name='GZ_SIM_RESOURCE_PATH',
+        value=[
+            os.path.dirname(get_package_share_directory(package_name)) + ':' +
+            os.path.join(get_package_share_directory(package_name), 'worlds') + ':' +
+            os.path.join(get_package_share_directory(package_name), 'worlds', 'models')
+        ]
+    )
+
+    ign_resource_path_legacy = SetEnvironmentVariable(
+        name='IGN_GAZEBO_RESOURCE_PATH',
+        value=[
+            os.path.dirname(get_package_share_directory(package_name)) + ':' +
+            os.path.join(get_package_share_directory(package_name), 'worlds') + ':' +
+            os.path.join(get_package_share_directory(package_name), 'worlds', 'models')
+        ]
+    )
+
+    ign_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+          os.path.join(
+            get_package_share_directory('ros_gz_sim'),
+            'launch', 'gz_sim.launch.py'
+          )
+        ),
+        launch_arguments={
+            'gz_args': ['-r ', world_file],
+            'verbose': 'true'
+        }.items()
+    )
+    
+    
+    # --- 4) Spawn the robot_description into Ignition ---
+    spawn_entity = Node(
+        package="ros_gz_sim",
+        executable="create",
+        output="screen",
+        arguments=[
+            "-name",  "my_robot_1",
+            "-topic", "robot_description",
+            "-x", spawn_x,
+            "-y", spawn_y,
+            "-z", "0.3",
+            "-allow_renaming", "true",
+            "--ros-args",
+        ],
+        parameters=[{"use_sim_time": use_sim_time}],
+    )
+
+    # --- 5) Load and start your controllers ---
+    # Controller manager spawners
+    joint_broad_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=[
+            "joint_state_broadcaster",
+            "--controller-manager", "/controller_manager",
+            "--controller-manager-timeout", "20",
+            "--switch-timeout", "20",
+            ],
+        output='screen',
+        parameters=[{'use_sim_time': use_sim_time}]
+    )
+
+    diff_drive_spawner = Node(
+        package='controller_manager',
+        executable='spawner',
+        arguments=[
+            'diff_drive_base_controller',
+            '--param-file', robot_controllers,
+            '--controller-manager-timeout', '20',
+            '--switch-timeout', '20',
+            #'--ros-args', '-r', '/diff_drive_base_controller/cmd_vel:=/cmd_vel'
+        ],
+        output='screen',
+        parameters=[{'use_sim_time': use_sim_time}]
+    )
+
+    # --- 6) Set up the Ros Gazebo Bridge ---
+    bridge = Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        name='parameter_bridge',
+        arguments=[
+            '/scan@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan',
+            '/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock',
+            '/odom@nav_msgs/msg/Odometry[gz.msgs.Odometry',
+            '/cmd_vel@geometry_msgs/msg/Twist[gz.msgs.Twist',
+            '/imu/data@sensor_msgs/msg/Imu[gz.msgs.IMU',
+            '/joint_states@sensor_msgs/msg/JointState[gz.msgs.Model',
+            '/tf@tf2_msgs/msg/TFMessage[gz.msgs.Pose_V',
+            '/camera/left@sensor_msgs/msg/Image[gz.msgs.Image',
+            '/camera/right@sensor_msgs/msg/Image[gz.msgs.Image',
+            '/camera/depth@sensor_msgs/msg/Image[gz.msgs.Image',
+            '/camera/camera_info@sensor_msgs/msg/CameraInfo[gz.msgs.CameraInfo',
+            '/camera/left_camera@sensor_msgs/msg/Image[gz.msgs.Image',
+            '/camera/right_camera@sensor_msgs/msg/Image[gz.msgs.Image',
+            '/camera/left_camera/depth@sensor_msgs/msg/Image[gz.msgs.Image',
+            '/camera/right_camera/depth@sensor_msgs/msg/Image[gz.msgs.Image'
+        ],
+        remappings=[
+            ('/camera/left', '/camera/left/image_raw'),
+            ('/camera/right', '/camera/right/image_raw'),
+            ('/camera/depth', '/camera/depth/image_raw'),
+            ('/camera/left_camera', '/camera/left_camera/image_raw'),
+            ('/camera/right_camera', '/camera/right_camera/image_raw'),
+            ('/camera/left_camera/depth', '/camera/left_camera/depth/image_raw'),
+            ('/camera/right_camera/depth', '/camera/right_camera/depth/image_raw'),
+        ],
+        output='screen'
+    )
+    
+    # Camera frame fixer - remap Gazebo's frame_id to proper TF frame
+    camera_frame_fixer = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        name='camera_frame_publisher',
+        arguments=['0', '0', '0', '0', '0', '0', 'camera_link', 'my_robot_1/base_link/camera'],
+        parameters=[{'use_sim_time': use_sim_time}]
+    )
+    
+    # --- 7) Static TF publishers are handled by robot_state_publisher ---
+    # The laser_frame → my_robot_1/base_link/laser_frame transform comes from URDF
+    # EKF is launched separately via robot_localization_ekf.launch.py (the UI's
+    # "Launch Robot Localization" button) - starting it here too would spawn a
+    # second node with the same name, and both would fight over odom->base_link TF.
+
+    return LaunchDescription([
+      DeclareLaunchArgument('use_sim_time',    default_value='true'),
+      DeclareLaunchArgument('use_ros2_control',default_value='true'),
+      DeclareLaunchArgument('use_lidar',       default_value='true'),
+      DeclareLaunchArgument('spawn_x',         default_value='0.0'),
+      DeclareLaunchArgument('spawn_y',         default_value='0.0'),
+      DeclareLaunchArgument('world_file',      default_value=os.path.join(
+          get_package_share_directory(package_name), 'worlds', 'igvc.sdf')),
+      DeclareLaunchArgument('robot_model',     default_value='robot.urdf.xacro',
+          description='xacro filename under description/ to load (e.g. robot_dual_camera.urdf.xacro)'),
+      # Defaults changed 2026-10-20 from front/pole_top on measured evidence:
+      # 36 runs, 3 worlds x 4 mount combinations x 3 repeats. pole_top camera
+      # with a low LiDAR ranked best in every world (mean rank 1.33 of 4).
+      # Lowering the LiDAR roughly doubles path length and drops the stalled
+      # fraction from 72% to 35%; raising the camera is what makes lanes
+      # visible at all on sim_world_ic, where six consecutive front-camera
+      # runs detected zero lane segments. See the sweep results doc.
+      #
+      # IF YOU CHANGE camera_mount, CHANGE THE DETECTOR GEOMETRY TOO:
+      #   pole_top -> -p camera_mount_height:=1.30  -p camera_mount_pitch:=-0.2618
+      #   front    -> -p camera_mount_height:=0.315 -p camera_mount_pitch:=0.0
+      # The pitch sign is NEGATIVE in the detector and POSITIVE here: the
+      # detector rotates rays in the optical frame (Y down) and solves
+      # t = height / ray_y_rot, so a downward tilt is negative there.
+      # Get it wrong and the mask still looks perfect while /lane_obstacles
+      # projects to the wrong ground range.
+      DeclareLaunchArgument('camera_mount',    default_value='pole_top',
+          description='ZED mount point: "pole_top" (default, 1.30 m, 15 deg down) or "front" (low, forward, 0.315 m level)'),
+      DeclareLaunchArgument('lidar_mount',     default_value='low',
+          description='LiDAR mount point: "low" (default, on the chassis at 0.385 m) or "pole_top" (on the pole at 1.385 m)'),
+      rsp,
+      ekf_launch,
+      ign_resource_path,
+      ign_resource_path_legacy,
+      bridge,
+      camera_frame_fixer,
+      ign_launch,
+      spawn_entity,
+      joint_broad_spawner,
+      diff_drive_spawner
+    ])
